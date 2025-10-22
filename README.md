@@ -7,7 +7,8 @@ This example showcases how to build a Movement blockchain wallet using Privy's E
 ### 1. Clone the Project
 
 ```bash
-mkdir -p movement-privy-wallet && curl -L https://github.com/privy-io/privy-examples/archive/main.tar.gz | tar -xz --strip=2 -C movement-privy-wallet examples-main/privy-expo-starter && cd movement-privy-wallet
+git clone https://github.com/dumbdevss/Movement-react-native-privy-template.git movement-privy-wallet
+cd movement-privy-wallet
 ```
 
 ### 2. Install Dependencies
