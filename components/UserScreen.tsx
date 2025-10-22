@@ -13,7 +13,7 @@ import { usePrivy } from "@privy-io/expo";
 import { useMovementWallet } from "../hooks/useMovement";
 import { useCreateWallet } from "@privy-io/expo/extended-chains";
 
-export const AptosWalletPortfolio = () => {
+export const MovementWalletPortfolio = () => {
   const { user, logout } = usePrivy();
   const { createWallet } = useCreateWallet();
   const [selectedWallet, setSelectedWallet] = useState<string | null>(null);
@@ -35,8 +35,8 @@ export const AptosWalletPortfolio = () => {
     setModalVisible(true);
   };
 
-  // Filter Aptos wallets from linked accounts
-  const aptosWallets: any[] = useMemo(() => {
+  // Filter Movement wallets from linked accounts
+  const movementWallets: any[] = useMemo(() => {
     if (!user?.linked_accounts) return [];
 
     return user.linked_accounts.filter(
@@ -44,21 +44,21 @@ export const AptosWalletPortfolio = () => {
     );
   }, [user?.linked_accounts]);
 
-  // Create Aptos wallet if user doesn't have one
+  // Create Movement wallet if user doesn't have one
   useEffect(() => {
-    const createAptosWallet = async () => {
-      if (user && aptosWallets.length === 0 && !isCreatingWallet) {
+    const createMovementWallet = async () => {
+      if (user && movementWallets.length === 0 && !isCreatingWallet) {
         setIsCreatingWallet(true);
         try {
           await createWallet({
             chainType: "aptos",
           });
-          showModal("Success", "Aptos wallet created successfully!");
+          showModal("Success", "Movement wallet created successfully!");
         } catch (error) {
-          console.error("Failed to create Aptos wallet:", error);
+          console.error("Failed to create Movement wallet:", error);
           showModal(
             "Wallet Creation Failed",
-            "Failed to create Aptos wallet. You can logout and try again."
+            "Failed to create Movement wallet. You can logout and try again."
           );
         } finally {
           setIsCreatingWallet(false);
@@ -66,14 +66,14 @@ export const AptosWalletPortfolio = () => {
       }
     };
 
-    createAptosWallet();
-  }, [user, aptosWallets.length, createWallet, isCreatingWallet, logout]);
+    createMovementWallet();
+  }, [user, movementWallets.length, createWallet, isCreatingWallet, logout]);
 
   // Get selected wallet details
   const activeWallet = useMemo(() => {
-    if (!selectedWallet) return aptosWallets[0];
-    return aptosWallets.find((w) => w.address === selectedWallet) || aptosWallets[0];
-  }, [selectedWallet, aptosWallets]);
+    if (!selectedWallet) return movementWallets[0];
+    return movementWallets.find((w) => w.address === selectedWallet) || movementWallets[0];
+  }, [selectedWallet, movementWallets]);
 
   // Fetch balance on wallet change
   useEffect(() => {
@@ -81,7 +81,7 @@ export const AptosWalletPortfolio = () => {
       if (!activeWallet) return;
       try {
         const balance = await getWalletBalance(activeWallet.address);
-        setWalletBalance(balance / 1e8); // convert from Octas to APT
+        setWalletBalance(balance / 1e8); // convert from Octas to MOVE
       } catch (error) {
         console.error("Error fetching balance:", error);
       }
@@ -89,7 +89,7 @@ export const AptosWalletPortfolio = () => {
     fetchBalance();
   }, [activeWallet, getWalletBalance]);
 
-  // Send 1 APT Transaction
+  // Send 1 MOVE Transaction
   const handleSendTransaction = useCallback(async () => {
     if (!activeWallet) return;
 
@@ -178,13 +178,13 @@ export const AptosWalletPortfolio = () => {
     return (
       <View style={styles.emptyContainer}>
         <ActivityIndicator size="large" color="#5b21b6" />
-        <Text style={styles.emptyText}>Creating your Aptos wallet...</Text>
+        <Text style={styles.emptyText}>Creating your Movement wallet...</Text>
         <Text style={styles.emptySubtext}>This will only take a moment</Text>
       </View>
     );
   }
 
-  if (aptosWallets.length === 0) {
+  if (movementWallets.length === 0) {
     return (
       <View style={styles.emptyContainer}>
         <Ionicons name="wallet-outline" size={64} color="#cbd5e1" />
@@ -201,7 +201,7 @@ export const AptosWalletPortfolio = () => {
           <View>
             <Text style={styles.headerTitle}>Movement Expo</Text>
             <Text style={styles.headerSubtitle}>
-              {aptosWallets.length} {aptosWallets.length === 1 ? "wallet" : "wallets"} connected
+              {movementWallets.length} {movementWallets.length === 1 ? "wallet" : "wallets"} connected
             </Text>
           </View>
           <Pressable style={styles.logoutButton} onPress={logout}>
@@ -212,7 +212,7 @@ export const AptosWalletPortfolio = () => {
 
       {/* Wallet Cards */}
       <View style={styles.walletsContainer}>
-        {aptosWallets.map((wallet, index) => (
+        {movementWallets.map((wallet, index) => (
           <Pressable
             key={`${wallet.address}-${index}`}
             style={[
@@ -293,7 +293,7 @@ export const AptosWalletPortfolio = () => {
               <View style={styles.actionContent}>
                 <Text style={styles.actionTitle}>Send 1 MOVE</Text>
                 <Text style={styles.actionSubtitle}>
-                  {isLoadingSend ? "Sending..." : "Send 1 APT to test address"}
+                  {isLoadingSend ? "Sending..." : "Send 1 MOVE to test address"}
                 </Text>
               </View>
               {isLoadingSend ? (

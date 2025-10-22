@@ -160,7 +160,7 @@ app.post('/faucet', async (req, res) => {
 });
 
 // ======================================
-// 4️⃣ Get APT balance
+// 4️⃣ Get MOVE balance
 // ======================================
 app.get('/balance/:address', async (req, res) => {
     const { address } = req.params;
