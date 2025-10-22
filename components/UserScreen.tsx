@@ -199,7 +199,7 @@ export const AptosWalletPortfolio = () => {
       <View style={styles.header}>
         <View style={styles.headerTop}>
           <View>
-            <Text style={styles.headerTitle}>Aptos Portfolio</Text>
+            <Text style={styles.headerTitle}>Movement Expo</Text>
             <Text style={styles.headerSubtitle}>
               {aptosWallets.length} {aptosWallets.length === 1 ? "wallet" : "wallets"} connected
             </Text>
@@ -226,7 +226,7 @@ export const AptosWalletPortfolio = () => {
                 <Ionicons name="wallet" size={24} color="#5b21b6" />
               </View>
               <View style={styles.walletInfo}>
-                <Text style={styles.walletLabel}>Aptos Wallet {index + 1}</Text>
+                <Text style={styles.walletLabel}>Movement Wallet {index + 1}</Text>
                 <Text style={styles.walletAddress}>{formatAddress(wallet.address)}</Text>
               </View>
             </View>
@@ -291,7 +291,7 @@ export const AptosWalletPortfolio = () => {
                 <Ionicons name="send" size={22} color="#5b21b6" />
               </View>
               <View style={styles.actionContent}>
-                <Text style={styles.actionTitle}>Send 1 APT</Text>
+                <Text style={styles.actionTitle}>Send 1 MOVE</Text>
                 <Text style={styles.actionSubtitle}>
                   {isLoadingSend ? "Sending..." : "Send 1 APT to test address"}
                 </Text>

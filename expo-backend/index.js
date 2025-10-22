@@ -104,8 +104,6 @@ app.post('/submit-transaction', async (req, res) => {
     if (processedPublicKey.length !== 64) {
         throw new Error(`Invalid public key length: expected 64 characters, got ${processedPublicKey.length}. Key: ${processedPublicKey}`);
     }
-    console.log("✅ Public Key:", processedPublicKey);
-    console.log("✅ Signature:", signature.slice(2));
 
     try {
         const senderAuthenticator = new AccountAuthenticatorEd25519(
@@ -119,8 +117,6 @@ app.post('/submit-transaction', async (req, res) => {
             transaction: backendRawTxn,
             senderAuthenticator: senderAuthenticator,
         });
-
-        console.log("✅ Pending transaction:", pendingTxn);
 
         const executedTxn = await aptos.waitForTransaction({ transactionHash: pendingTxn.hash });
 

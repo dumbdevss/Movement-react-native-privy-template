@@ -82,7 +82,6 @@ export default function PrivyUI() {
       ] 
     })
       .then((session) => {
-        console.log("User logged in", session.user);
         setIsLoading(false);
       })
       .catch((err) => {
