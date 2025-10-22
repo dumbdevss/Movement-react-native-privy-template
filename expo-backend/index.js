@@ -12,8 +12,8 @@ import {
     Ed25519PublicKey,
     Ed25519Signature,
     generateSigningMessageForTransaction,
-    RawTransaction,
-    Serializer,
+    SimpleTransaction,
+    Hex,
     Deserializer,
 } from '@aptos-labs/ts-sdk';
 
@@ -64,15 +64,12 @@ app.post('/generate-hash', async (req, res) => {
         const message = generateSigningMessageForTransaction(rawTxn);
         const hash = toHex(message);
 
-        const serializer = new Serializer();
-        rawTxn.serialize(serializer);
-        const bytes = serializer.toUint8Array();
-        const hex = Buffer.from(bytes).toString('hex');
+        const rawTxnHex = rawTxn.bcsToHex().toString();
 
         res.json({
             success: true,
             hash,
-            rawTxnHex: hex,
+            rawTxnHex: rawTxnHex,
         });
     } catch (error) {
         console.error('Error generating signing hash:', error);
@@ -116,12 +113,10 @@ app.post('/submit-transaction', async (req, res) => {
             new Ed25519Signature(signature)
         );
 
-       const rawTxnBytes = new Uint8Array(Buffer.from(rawTxnHex, 'hex'));
-        const deserializer = new Deserializer(rawTxnBytes);
-        const rawTxn = RawTransaction.deserialize(deserializer);
+       const backendRawTxn = SimpleTransaction.deserialize(new Deserializer(Hex.fromHexInput(rawTxnHex).toUint8Array()));
 
         const pendingTxn = await aptos.transaction.submit.simple({
-            transaction: rawTxn,
+            transaction: backendRawTxn,
             senderAuthenticator: senderAuthenticator,
         });
 

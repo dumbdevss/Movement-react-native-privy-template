@@ -98,8 +98,8 @@ export const AptosWalletPortfolio = () => {
       const result = await signAndSubmitTransaction(
         activeWallet.public_key,
         activeWallet.address,
-        "0x1::coin::transfer",
-        ["0x1::aptos_coin::AptosCoin"],
+        "0x1::aptos_account::transfer",
+        [],
         ["0x9b0e90c9f3d8e5b3d8cfc9a0c0f9621c742e5675b4f4e772fbef457b73ef4e4a", 1_00000000] // replace with your test address
       );
 
