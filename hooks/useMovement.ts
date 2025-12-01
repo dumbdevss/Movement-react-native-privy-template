@@ -2,7 +2,7 @@
 import { useCallback } from "react";
 import { useSignRawHash } from "@privy-io/expo/extended-chains";
 
-const API_BASE_URL = "http://localhost:3000"; // ⬅️ replace with your deployed backend URL
+const API_BASE_URL = "https://privy-backend-1.onrender.com"; // ⬅️ replace with your deployed backend URL
 
 export function useMovementWallet() {
   const { signRawHash } = useSignRawHash();
@@ -124,10 +124,38 @@ export function useMovementWallet() {
     }
   }, []);
 
+  const viewFunction = useCallback(async (func: string, typeArguments: string[] = [], functionArguments: any[] = []) => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/view`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          function: func,
+          typeArguments,
+          functionArguments,
+        }),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || 'Failed to call view function');
+      }
+
+      const data = await res.json();
+      return data.result;
+    } catch (error) {
+      console.error('Error calling view function:', error);
+      throw error;
+    }
+  }, []);
+
   return {
     signAndSubmitTransaction,
     getWalletBalance,
     getAccountInfo,
     requestFaucet,
+    viewFunction,
   };
 }

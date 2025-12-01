@@ -189,6 +189,39 @@ app.get('/account-info/:address', async (req, res) => {
     }
 });
 
+// ======================================
+// 6️⃣ Health check
+// ======================================
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok' });
+});
+
+// ======================================
+// 7️⃣ View function (read-only)
+// ======================================
+app.post('/view', async (req, res) => {
+    const { function: func, typeArguments, functionArguments } = req.body;
+
+    if (!func) {
+        return res.status(400).json({ error: 'Missing required field: function' });
+    }
+
+    try {
+        const result = await aptos.view({
+            payload: {
+                function: func, // Module address::module_name::function_name
+                typeArguments: typeArguments || [], // Type arguments if required
+                functionArguments: functionArguments || [], // Arguments for the function
+            },
+        });
+
+        res.json({ success: true, result });
+    } catch (error) {
+        console.error('Error calling view function:', error);
+        res.status(500).json({ error: 'Failed to call view function' });
+    }
+});
+
 app.listen(port, () => {
     console.log(`✅ Backend running at http://localhost:${port}`);
 });
